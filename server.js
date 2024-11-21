@@ -3,6 +3,8 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import cors from "cors";
 
+import authRoutes from "./routes/auth.routes.js";
+
 import { ENV_VARS } from "./config/envVars.js";
 import { connectDB } from "./config/db.js";
 import { setupSwagger } from "./config/swagger.js";
@@ -14,16 +16,17 @@ app.use(cors({
 	credentials: true // Allow credentials to be sent with requests
 }));
 
-const PORT = ENV_VARS.PORT;
-
 app.use(express.json()); // will allow us to parse req.body
 app.use(cookieParser());
 
+app.use("/api/v1/auth", authRoutes);
 
 setupSwagger(app);
 
+const PORT = ENV_VARS.PORT;
+
 app.listen(PORT, () => {
-	console.log("Server started at http://3.222.169.78:" + PORT);
-	console.log("Swagger API documentation available at: http://3.222.169.78:" + PORT + "/api-docs");
+	console.log("Server started at http://localhost:" + PORT);
+	console.log("Swagger API documentation available at: http://localhost:" + PORT + "/api-docs");
 	connectDB();
 });
