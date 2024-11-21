@@ -268,7 +268,6 @@ export async function authCheck(req, res) {
  */
 export async function refreshToken(req, res) {
 	try {
-		console.log('cookies ne: ', req);
 		const token = req.cookies.refreshToken;
 
 		if (!token) {

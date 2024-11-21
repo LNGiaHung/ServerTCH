@@ -1,9 +1,9 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import path from "path";
 import cors from "cors";
 
 import authRoutes from "./routes/auth.routes.js";
+import movieRoutes from "./routes/movie.routes.js";
 
 import { ENV_VARS } from "./config/envVars.js";
 import { connectDB } from "./config/db.js";
@@ -16,17 +16,18 @@ app.use(cors({
 	credentials: true // Allow credentials to be sent with requests
 }));
 
-app.use(express.json()); // will allow us to parse req.body
-app.use(cookieParser());
+app.use(express.json()); // Parse JSON request bodies
+app.use(cookieParser()); // Parse cookies
 
-app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/auth", authRoutes); // Authentication routes
+app.use("/api/v1/movies", movieRoutes); // Movie routes
 
-setupSwagger(app);
+setupSwagger(app); // Set up Swagger documentation
 
 const PORT = ENV_VARS.PORT;
 
 app.listen(PORT, () => {
 	console.log("Server started at http://localhost:" + PORT);
 	console.log("Swagger API documentation available at: http://localhost:" + PORT + "/api-docs");
-	connectDB();
+	connectDB(); // Connect to the database
 });
