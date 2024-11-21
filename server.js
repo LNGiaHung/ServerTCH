@@ -5,6 +5,7 @@ import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
 import movieRoutes from "./routes/movie.routes.js";
 import tvRoutes from "./routes/tv.routes.js";
+import searchRoutes from "./routes/search.routes.js";
 
 import { ENV_VARS } from "./config/envVars.js";
 import { connectDB } from "./config/db.js";
@@ -23,6 +24,7 @@ app.use(cookieParser()); // Parse cookies
 app.use("/api/v1/auth", authRoutes); // Authentication routes
 app.use("/api/v1/movies", movieRoutes); // Movie routes
 app.use("/api/v1/tvs", tvRoutes);
+app.use("/api/v1/search", searchRoutes);
 
 setupSwagger(app); // Set up Swagger documentation
 
