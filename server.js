@@ -10,6 +10,7 @@ import searchRoutes from "./routes/search.routes.js";
 import { ENV_VARS } from "./config/envVars.js";
 import { connectDB } from "./config/db.js";
 import { setupSwagger } from "./config/swagger.js";
+import { protectRoute } from "./middleware/protectRoute.js";
 
 const app = express();
 
@@ -24,7 +25,7 @@ app.use(cookieParser()); // Parse cookies
 app.use("/api/v1/auth", authRoutes); // Authentication routes
 app.use("/api/v1/movies", movieRoutes); // Movie routes
 app.use("/api/v1/tvs", tvRoutes);
-app.use("/api/v1/search", searchRoutes);
+app.use("/api/v1/search", protectRoute, searchRoutes);
 
 setupSwagger(app); // Set up Swagger documentation
 

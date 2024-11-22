@@ -7,6 +7,8 @@ import { fetchFromTMDB } from "../services/tmdb.service.js";
  *   get:
  *     summary: Search for a person
  *     tags: [Search]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: query
@@ -17,12 +19,18 @@ import { fetchFromTMDB } from "../services/tmdb.service.js";
  *     responses:
  *       200:
  *         description: Successfully retrieved search results
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: No results found
  *       500:
  *         description: Internal Server Error
  */
 export async function searchPerson(req, res) {
+	if (!req.user) {
+		return res.status(401).json({ success: false, message: "Unauthorized" });
+	}
+
 	const { query } = req.params;
 	try {
 		const response = await fetchFromTMDB(
@@ -58,6 +66,8 @@ export async function searchPerson(req, res) {
  *   get:
  *     summary: Search for a movie
  *     tags: [Search]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: query
@@ -68,12 +78,18 @@ export async function searchPerson(req, res) {
  *     responses:
  *       200:
  *         description: Successfully retrieved search results
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: No results found
  *       500:
  *         description: Internal Server Error
  */
 export async function searchMovie(req, res) {
+	if (!req.user) {
+		return res.status(401).json({ success: false, message: "Unauthorized" });
+	}
+
 	const { query } = req.params;
 
 	try {
@@ -109,6 +125,8 @@ export async function searchMovie(req, res) {
  *   get:
  *     summary: Search for a TV show
  *     tags: [Search]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: query
@@ -119,12 +137,18 @@ export async function searchMovie(req, res) {
  *     responses:
  *       200:
  *         description: Successfully retrieved search results
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: No results found
  *       500:
  *         description: Internal Server Error
  */
 export async function searchTv(req, res) {
+	if (!req.user) {
+		return res.status(401).json({ success: false, message: "Unauthorized" });
+	}
+
 	const { query } = req.params;
 
 	try {
@@ -160,13 +184,21 @@ export async function searchTv(req, res) {
  *   get:
  *     summary: Get search history for the authenticated user
  *     tags: [Search]
+ *     security:
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Successfully retrieved search history
+ *       401:
+ *         description: Unauthorized
  *       500:
  *         description: Internal Server Error
  */
 export async function getSearchHistory(req, res) {
+	if (!req.user) {
+		return res.status(401).json({ success: false, message: "Unauthorized" });
+	}
+
 	try {
 		res.status(200).json({ success: true, content: req.user.searchHistory });
 	} catch (error) {
@@ -180,6 +212,8 @@ export async function getSearchHistory(req, res) {
  *   delete:
  *     summary: Remove an item from search history
  *     tags: [Search]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -190,12 +224,17 @@ export async function getSearchHistory(req, res) {
  *     responses:
  *       200:
  *         description: Successfully removed item from search history
+ *       401:
+ *         description: Unauthorized
  *       500:
  *         description: Internal Server Error
  */
 export async function removeItemFromSearchHistory(req, res) {
-	let { id } = req.params;
+	if (!req.user) {
+		return res.status(401).json({ success: false, message: "Unauthorized" });
+	}
 
+	let { id } = req.params;
 	id = parseInt(id);
 
 	try {

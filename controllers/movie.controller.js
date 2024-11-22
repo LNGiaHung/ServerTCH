@@ -60,7 +60,7 @@ export async function getMovieTrailers(req, res) {
 
 /**
  * @swagger
- * /movies/{id}:
+ * /movies/{id}/details:
  *   get:
  *     summary: Get details for a specific movie
  *     tags: [Movie]
