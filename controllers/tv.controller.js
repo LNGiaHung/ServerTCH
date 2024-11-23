@@ -60,7 +60,7 @@ export async function getTvTrailers(req, res) {
 
 /**
  * @swagger
- * /tvs/{id}:
+ * /tvs/{id}/details:
  *   get:
  *     summary: Get details for a specific TV show
  *     tags: [TV]
