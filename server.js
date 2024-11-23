@@ -14,10 +14,21 @@ import { protectRoute } from "./middleware/protectRoute.js";
 
 const app = express();
 
-app.use(cors({
-	origin: '*', // Allow requests from all origins
-	credentials: true // Allow credentials to be sent with requests
-}));
+// Dynamically set the allowed origin
+const corsOptions = {
+	origin: (origin, callback) => {
+		// Allow requests from all origins, but handle credentials properly
+		if (origin) {
+			callback(null, origin); // Allow the requesting origin
+		} else {
+			callback(new Error('Not allowed by CORS'));
+		}
+	},
+	credentials: true, // Allow credentials (cookies, authorization headers)
+};
+
+// Use CORS middleware
+app.use(cors(corsOptions));
 
 app.use(express.json()); // Parse JSON request bodies
 app.use(cookieParser()); // Parse cookies
