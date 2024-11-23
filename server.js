@@ -14,16 +14,9 @@ import { protectRoute } from "./middleware/protectRoute.js";
 
 const app = express();
 
-// Dynamically set the allowed origin
+// CORS configuration
 const corsOptions = {
-	origin: (origin, callback) => {
-		// Allow requests from specific origin
-		if (origin === 'https://tchmovie.edwardxd.site') {
-			callback(null, origin); // Allow the requesting origin
-		} else {
-			callback(new Error('Not allowed by CORS'));
-		}
-	},
+	origin: ['https://tchmovie.edwardxd.site'], // Allow this origin
 	credentials: true, // Allow credentials (cookies, authorization headers)
 };
 
