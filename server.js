@@ -15,7 +15,7 @@ import { protectRoute } from "./middleware/protectRoute.js";
 const app = express();
 
 app.use(cors({
-	origin: 'http://44.196.160.2:5173', // Replace with your frontend's origin
+	origin: 'http://localhost:5173', // Replace with your frontend's origin
 	credentials: true // Allow credentials to be sent with requests
 }));
 
