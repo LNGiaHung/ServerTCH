@@ -15,7 +15,7 @@ import { protectRoute } from "./middleware/protectRoute.js";
 const app = express();
 
 app.use(cors({
-	origin: 'http://localhost:5173', // Replace with your frontend's origin
+	origin: 'http://44.196.160.2:5173', // Replace with your frontend's origin
 	credentials: true // Allow credentials to be sent with requests
 }));
 
@@ -32,7 +32,7 @@ setupSwagger(app); // Set up Swagger documentation
 const PORT = ENV_VARS.PORT;
 
 app.listen(PORT, () => {
-	console.log("Server started at http://localhost:" + PORT);
-	console.log("Swagger API documentation available at: http://localhost:" + PORT + "/api-docs");
+	console.log("Server started at http://44.196.160.2:" + PORT);
+	console.log("Swagger API documentation available at: http://44.196.160.2:" + PORT + "/api-docs");
 	connectDB(); // Connect to the database
 });
