@@ -17,8 +17,8 @@ const app = express();
 // Dynamically set the allowed origin
 const corsOptions = {
 	origin: (origin, callback) => {
-		// Allow requests from all origins, but handle credentials properly
-		if (origin) {
+		// Allow requests from specific origin
+		if (origin === 'https://tchmovie.edwardxd.site') {
 			callback(null, origin); // Allow the requesting origin
 		} else {
 			callback(new Error('Not allowed by CORS'));
