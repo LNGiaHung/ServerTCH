@@ -1,6 +1,8 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import https from 'https';
+import fs from 'fs';
 
 import authRoutes from "./routes/auth.routes.js";
 import movieRoutes from "./routes/movie.routes.js";
@@ -14,16 +16,11 @@ import { protectRoute } from "./middleware/protectRoute.js";
 
 const app = express();
 
-// // CORS configuration
-// app.use(cors({
-//     origin: /\.edwardxd\.site$/,  // Allow all subdomains of edwardxd.site
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-//     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-//     exposedHeaders: ['Content-Type', 'Authorization'],
-//     credentials: true,
-//     preflightContinue: false,
-//     optionsSuccessStatus: 204
-// }));
+// SSL configuration
+const sslOptions = {
+  key: fs.readFileSync('/etc/letsencrypt/live/tchserver.edwardxd.site/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/tchserver.edwardxd.site/fullchain.pem')
+};
 
 // Built-in middleware
 app.use(express.json()); // Parse JSON request bodies
@@ -37,10 +34,13 @@ app.use("/api/v1/search", protectRoute, searchRoutes);
 
 setupSwagger(app); // Set up Swagger documentation
 
-const PORT = ENV_VARS.PORT;
+const PORT = 443; // HTTPS port
 
-app.listen(PORT, () => {
-    console.log("Server started at http://localhost:" + PORT);
-    console.log("Swagger API documentation available at: http://localhost:" + PORT + "/api-docs");
-    connectDB(); // Connect to the database
+// Create HTTPS server
+const httpsServer = https.createServer(sslOptions, app);
+
+// Start server
+httpsServer.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT} with HTTPS`);
+    connectDB();
 });
