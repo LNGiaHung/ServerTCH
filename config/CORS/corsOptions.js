@@ -2,8 +2,8 @@ import allowedOrigins from "./allowedOrigin.js";
 
 const corsOptions = {
     origin: (origin, callback) => {
-        if (allowedOrigins.includes(origin) || !origin) {
-            callback(null, origin || '*');
+        if (allowedOrigins.includes(origin)) {
+            callback(null, origin);
         } else {
             callback(new Error('Not allowed by CORS'));
         }
@@ -18,7 +18,7 @@ const corsOptions = {
         'Accept',
         'Authorization'
     ],
-    exposedHeaders: ['set-cookie']
+    exposedHeaders: ['Set-Cookie']
 };
 
 export default corsOptions;

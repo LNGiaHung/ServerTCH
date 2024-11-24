@@ -13,12 +13,8 @@ import { setupSwagger } from "./config/swagger.js";
 import { protectRoute } from "./middleware/protectRoute.js";
 
 import corsOptions from "./config/CORS/corsOptions.js";
-import credentials from "./middleware/credentials.js";
 
 const app = express();
-
-// Handle options credentials check - before CORS!
-app.use(credentials);
 
 // CORS middleware
 app.use(cors(corsOptions));
