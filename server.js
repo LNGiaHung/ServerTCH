@@ -14,16 +14,16 @@ import { protectRoute } from "./middleware/protectRoute.js";
 
 const app = express();
 
-// CORS configuration
-app.use(cors({
-    origin: /\.edwardxd\.site$/,  // Allow all subdomains of edwardxd.site
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    exposedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-    preflightContinue: false,
-    optionsSuccessStatus: 204
-}));
+// // CORS configuration
+// app.use(cors({
+//     origin: /\.edwardxd\.site$/,  // Allow all subdomains of edwardxd.site
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+//     exposedHeaders: ['Content-Type', 'Authorization'],
+//     credentials: true,
+//     preflightContinue: false,
+//     optionsSuccessStatus: 204
+// }));
 
 // Built-in middleware
 app.use(express.json()); // Parse JSON request bodies
