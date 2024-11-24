@@ -14,26 +14,16 @@ import { protectRoute } from "./middleware/protectRoute.js";
 
 const app = express();
 
-// Custom CORS middleware
-app.use((req, res, next) => {
-    // Remove any existing CORS headers
-    res.removeHeader('Access-Control-Allow-Origin');
-    res.removeHeader('Access-Control-Allow-Credentials');
-    res.removeHeader('Access-Control-Allow-Methods');
-    res.removeHeader('Access-Control-Allow-Headers');
-    
-    // Set our own headers
-    res.header('Access-Control-Allow-Origin', 'https://tchmovie.edwardxd.site');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-
-    // Handle preflight
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
-    next();
-});
+// CORS configuration
+app.use(cors({
+    origin: 'https://tchmovie.edwardxd.site',  // Your specific domain
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    exposedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204
+}));
 
 // Built-in middleware
 app.use(express.json()); // Parse JSON request bodies
