@@ -15,18 +15,21 @@ import { protectRoute } from "./middleware/protectRoute.js";
 import corsOptions from "./config/CORS/corsOptions.js";
 import credentials from "./middleware/credentials.js";
 
-
 const app = express();
 
-
-app.use(express.json()); // Parse JSON request bodies
-app.use(cookieParser()); // Parse cookies
+// Handle options credentials check - before CORS!
 app.use(credentials);
 
+// CORS middleware
 app.use(cors(corsOptions));
 
-app.use("/api/v1/auth", authRoutes); // Authentication routes
-app.use("/api/v1/movies", movieRoutes); // Movie routes
+// Built-in middleware
+app.use(express.json()); // Parse JSON request bodies
+app.use(cookieParser()); // Parse cookies
+
+// Routes
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/movies", movieRoutes);
 app.use("/api/v1/tvs", tvRoutes);
 app.use("/api/v1/search", protectRoute, searchRoutes);
 
@@ -35,7 +38,7 @@ setupSwagger(app); // Set up Swagger documentation
 const PORT = ENV_VARS.PORT;
 
 app.listen(PORT, () => {
-	console.log("Server started at http://44.196.160.2:" + PORT);
-	console.log("Swagger API documentation available at: http://44.196.160.2:" + PORT + "/api-docs");
-	connectDB(); // Connect to the database
+    console.log("Server started at http://localhost:" + PORT);
+    console.log("Swagger API documentation available at: http://localhost:" + PORT + "/api-docs");
+    connectDB(); // Connect to the database
 });
