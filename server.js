@@ -12,15 +12,28 @@ import { connectDB } from "./config/db.js";
 import { setupSwagger } from "./config/swagger.js";
 import { protectRoute } from "./middleware/protectRoute.js";
 
-import corsOptions from "./config/CORS/corsOptions.js";
-
 const app = express();
 
-// Handle preflight requests
-app.options('*', cors(corsOptions));
+// Custom CORS middleware
+app.use((req, res, next) => {
+    // Remove any existing CORS headers
+    res.removeHeader('Access-Control-Allow-Origin');
+    res.removeHeader('Access-Control-Allow-Credentials');
+    res.removeHeader('Access-Control-Allow-Methods');
+    res.removeHeader('Access-Control-Allow-Headers');
+    
+    // Set our own headers
+    res.header('Access-Control-Allow-Origin', 'https://tchmovie.edwardxd.site');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
-// Enable CORS for all routes
-app.use(cors(corsOptions));
+    // Handle preflight
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    next();
+});
 
 // Built-in middleware
 app.use(express.json()); // Parse JSON request bodies
