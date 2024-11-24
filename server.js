@@ -16,7 +16,10 @@ import corsOptions from "./config/CORS/corsOptions.js";
 
 const app = express();
 
-// CORS middleware
+// Handle preflight requests
+app.options('*', cors(corsOptions));
+
+// Enable CORS for all routes
 app.use(cors(corsOptions));
 
 // Built-in middleware
