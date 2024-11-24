@@ -24,11 +24,8 @@ const sslOptions = {
 
 // CORS configuration
 app.use(cors({
-    origin: /\.edwardxd\.site$/,  // Allow all subdomains of edwardxd.site
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    exposedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204
 }));
