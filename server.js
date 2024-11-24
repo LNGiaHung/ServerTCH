@@ -7,24 +7,23 @@ import movieRoutes from "./routes/movie.routes.js";
 import tvRoutes from "./routes/tv.routes.js";
 import searchRoutes from "./routes/search.routes.js";
 
-import { ENV_VARS } from "./config/envVars.js";
+import { ENV_VARS } from "./config/envVar.js";
 import { connectDB } from "./config/db.js";
 import { setupSwagger } from "./config/swagger.js";
 import { protectRoute } from "./middleware/protectRoute.js";
 
+import corsOptions from "./config/CORS/corsOptions.js";
+import credentials from "./middleware/credentials.js";
+
+
 const app = express();
 
-// CORS configuration
-const corsOptions = {
-	origin: ['https://tchmovie.edwardxd.site'], // Allow this origin
-	credentials: true, // Allow credentials (cookies, authorization headers)
-};
-
-// Use CORS middleware
-app.use(cors(corsOptions));
 
 app.use(express.json()); // Parse JSON request bodies
 app.use(cookieParser()); // Parse cookies
+app.use(credentials);
+
+app.use(cors(corsOptions));
 
 app.use("/api/v1/auth", authRoutes); // Authentication routes
 app.use("/api/v1/movies", movieRoutes); // Movie routes

@@ -2,7 +2,7 @@ import { User } from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { generateAccessToken, generateRefreshToken, setRefreshTokenCookie } from "../utils/generateToken.js";
 import jwt from "jsonwebtoken";
-import { ENV_VARS } from "../config/envVars.js";
+import { ENV_VARS } from "../config/envVar.js";
 
 /**
  * @swagger

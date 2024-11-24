@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
-import { ENV_VARS } from "../config/envVars.js";
+import { ENV_VARS } from "../config/envVar.js";
 
 export const protectRoute = async (req, res, next) => {
 	try {
@@ -8,7 +8,7 @@ export const protectRoute = async (req, res, next) => {
 		const authHeader = req.headers.authorization;
 		const token = authHeader && authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
 
-		if (!token || token==null) {
+		if (!token || token == null) {
 			return res.status(401).json({ success: false, message: "Unauthorized - No Token Provided" });
 		}
 		let decoded;
