@@ -48,7 +48,6 @@ const PORT = 443; // HTTPS port
 const httpsServer = https.createServer(sslOptions, app);
 
 // Start server
-httpsServer.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT} with HTTPS`);
-    connectDB();
+https.createServer(sslOptions, app).listen(PORT, '0.0.0.0', () => {
+    console.log(`Server is running on https://0.0.0.0:${PORT}`);
 });
