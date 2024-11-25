@@ -11,7 +11,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://tchserver.edwardxd.site/api/v1", // Change this to your server URL
+                url: "https://tchserver.edwardxd.site/api/v1", // Change this to your server URL
             },
         ],
         components: {
