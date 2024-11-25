@@ -1,8 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import https from 'https';
-import fs from 'fs';
 
 import authRoutes from "./routes/auth.routes.js";
 import movieRoutes from "./routes/movie.routes.js";
@@ -16,15 +14,10 @@ import { protectRoute } from "./middleware/protectRoute.js";
 
 const app = express();
 
-// SSL configuration
-const sslOptions = {
-  key: fs.readFileSync('/etc/letsencrypt/live/tchserver.edwardxd.site/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/tchserver.edwardxd.site/fullchain.pem')
-};
-
 // CORS configuration
 app.use(cors({
-    origin: '*',
+    origin: "*",
+    credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204
@@ -42,12 +35,8 @@ app.use("/api/v1/search", protectRoute, searchRoutes);
 
 setupSwagger(app); // Set up Swagger documentation
 
-const PORT = 443; // HTTPS port
-
-// Create HTTPS server
-const httpsServer = https.createServer(sslOptions, app);
-
 // Start server
-https.createServer(sslOptions, app).listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running on https://0.0.0.0:${PORT}`);
+app.listen(ENV_VARS.PORT, () => {
+    console.log(`Server is running on http://localhost:${ENV_VARS.PORT}`);
+    connectDB();
 });
