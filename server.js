@@ -14,9 +14,12 @@ import { protectRoute } from "./middleware/protectRoute.js";
 
 const app = express();
 
+// Trust proxy settings
+app.set('trust proxy', true);
+
 // CORS configuration
 app.use(cors({
-    origin: "*",
+    origin: ['https://tchserver.edwardxd.site'],
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
@@ -27,6 +30,17 @@ app.use(cors({
 app.use(express.json()); // Parse JSON request bodies
 app.use(cookieParser()); // Parse cookies
 
+// Middleware to ensure HTTPS when in production
+if (process.env.NODE_ENV === 'production') {
+    app.use((req, res, next) => {
+        if (req.secure) {
+            next();
+        } else {
+            res.redirect(301, `https://${req.headers.host}${req.url}`);
+        }
+    });
+}
+
 // Routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/movies", movieRoutes);
@@ -35,8 +49,10 @@ app.use("/api/v1/search", protectRoute, searchRoutes);
 
 setupSwagger(app); // Set up Swagger documentation
 
+const PORT = ENV_VARS.PORT || 5000;
+
 // Start server
-app.listen(ENV_VARS.PORT, () => {
-    console.log(`Server is running on http://localhost:${ENV_VARS.PORT}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
     connectDB();
 });
