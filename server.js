@@ -14,12 +14,12 @@ import { protectRoute } from "./middleware/protectRoute.js";
 
 const app = express();
 
-// Trust proxy settings
+// Trust proxy settings for Caddy
 app.set('trust proxy', true);
 
 // CORS configuration
 app.use(cors({
-    origin: ['https://tchserver.edwardxd.site'],
+    origin: 'https://tchserver.edwardxd.site',
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
@@ -29,17 +29,6 @@ app.use(cors({
 // Built-in middleware
 app.use(express.json()); // Parse JSON request bodies
 app.use(cookieParser()); // Parse cookies
-
-// Middleware to ensure HTTPS when in production
-if (process.env.NODE_ENV === 'production') {
-    app.use((req, res, next) => {
-        if (req.secure) {
-            next();
-        } else {
-            res.redirect(301, `https://${req.headers.host}${req.url}`);
-        }
-    });
-}
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
@@ -53,6 +42,6 @@ const PORT = ENV_VARS.PORT || 5000;
 
 // Start server
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
     connectDB();
 });
