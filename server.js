@@ -21,10 +21,12 @@ app.use(cookieParser());
 
 // CORS configuration
 app.use(cors({
-    origin: 'https://tchserver.edwardxd.site',
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: ['https://tchmovie.edwardxd.site', 'http://localhost:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
+  exposedHeaders: ['Set-Cookie'],
+  optionsSuccessStatus: 200
 }));
 
 // Routes
