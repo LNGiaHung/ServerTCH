@@ -14,14 +14,15 @@ import { protectRoute } from "./middleware/protectRoute.js";
 
 const app = express();
 
-// Trust proxy settings for Caddy
+// Trust proxy settings for Cloudflare and Caddy
 app.set('trust proxy', true);
 
-// CORS configuration
+// CORS configuration for Cloudflare
 app.use(cors({
     origin: 'https://tchserver.edwardxd.site',
     credentials: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     preflightContinue: false,
     optionsSuccessStatus: 204
 }));
@@ -42,6 +43,6 @@ const PORT = ENV_VARS.PORT || 5000;
 
 // Start server
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server running on port ${PORT} (Proxied through Caddy and Cloudflare)`);
     connectDB();
 });
