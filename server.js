@@ -19,15 +19,24 @@ app.set('trust proxy', true);
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS configuration
-app.use(cors({
-  origin: ['https://tchmovie.edwardxd.site', 'http://localhost:3000'],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
-  exposedHeaders: ['Set-Cookie'],
-  optionsSuccessStatus: 200
+// CORS pre-flight
+app.options('*', cors({
+    origin: ['https://tchmovie.edwardxd.site', 'http://localhost:3000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
+    optionsSuccessStatus: 204
 }));
+
+// CORS for all routes
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'https://tchmovie.edwardxd.site');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Origin, Accept');
+    res.header('Access-Control-Expose-Headers', 'Set-Cookie');
+    next();
+});
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
