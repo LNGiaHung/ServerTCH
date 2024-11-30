@@ -11,12 +11,10 @@ export const generateRefreshToken = (userId) => {
 
 export const setRefreshTokenCookie = (refreshToken, res) => {
 	res.cookie("refreshToken", refreshToken, {
-		domain: ".tchmovie.edwardxd.site", // Added dot prefix for subdomain support
-		maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days in MS
-		httpOnly: true, // prevent XSS attacks
-		sameSite: "none", // for cross-origin requests, lowercase for consistency
-		secure: true, // always use HTTPS
-		path: "/api/v1",
-		credentials: true
+		domain: ".tchmovie.edwardxd.site", 
+		maxAge: 15 * 24 * 60 * 60 * 1000, 
+		httpOnly: true, 
+		sameSite: "none", 
+		secure: true, 
 	});
 };
