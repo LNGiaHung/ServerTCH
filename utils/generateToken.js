@@ -16,6 +16,7 @@ export const setRefreshTokenCookie = (refreshToken, res) => {
 		httpOnly: true, // prevent XSS attacks
 		sameSite: "None", // for cross-origin requests
 		secure: true, // always use HTTPS
-		path: "/", // cookie accessible from all paths
+		path: "/",
+		credentials: true
 	});
 };

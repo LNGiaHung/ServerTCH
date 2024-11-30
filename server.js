@@ -25,10 +25,14 @@ app.use(cors({
     origin: ['https://tchmovie.edwardxd.site', 'http://localhost:5173'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept', 'Set-Cookie'],
     exposedHeaders: ['Set-Cookie'],
-    optionsSuccessStatus: 200
+    optionsSuccessStatus: 200,
+    preflightContinue: true
 }));
+
+// Enable pre-flight requests for all routes
+app.options('*', cors());
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
