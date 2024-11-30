@@ -22,7 +22,7 @@ app.use(cookieParser());
 
 // CORS configuration
 app.use(cors({
-    origin: ['https://tchmovie.edwardxd.site', 'http://localhost:5173'],
+    origin: ['https://tchmovie.edwardxd.site', 'http://localhost:5173','https://tch-movie.vercel.app'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
