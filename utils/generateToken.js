@@ -10,11 +10,12 @@ export const generateRefreshToken = (userId) => {
 };
 
 export const setRefreshTokenCookie = (refreshToken, res) => {
-	res.cookie("refreshToken", refreshToken, { // Set the cookie name for the refresh token
+	res.cookie("refreshToken", refreshToken, {
 		domain: "tchmovie.edwardxd.site",
 		maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days in MS
 		httpOnly: true, // prevent XSS attacks
-		sameSite: "None", // prevent CSRF attacks
-		secure: ENV_VARS.NODE_ENV !== "development", // Use secure cookies in production
+		sameSite: "None", // for cross-origin requests
+		secure: true, // always use HTTPS
+		path: "/", // cookie accessible from all paths
 	});
 };
