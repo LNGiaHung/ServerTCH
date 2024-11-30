@@ -11,6 +11,7 @@ export const generateRefreshToken = (userId) => {
 
 export const setRefreshTokenCookie = (refreshToken, res) => {
 	res.cookie("refreshToken", refreshToken, { // Set the cookie name for the refresh token
+		domain: "tchmovie.edwardxd.site",
 		maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days in MS
 		httpOnly: true, // prevent XSS attacks
 		sameSite: "None", // prevent CSRF attacks
