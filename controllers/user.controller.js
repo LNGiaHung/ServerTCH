@@ -11,14 +11,7 @@ import { User } from '../models/user.model.js';
  */
 export async function getAvatarFolders(req, res) {
     try {
-        // First, get the root folder structure
-        const result = await cloudinary.v2.api.root_folders();
-        console.log('Root folders:', result);
-
-        // Then get Netflix Avatars subfolders
         const netflixFolders = await cloudinary.v2.api.sub_folders('Netflix Avatars');
-        console.log('Netflix Avatars subfolders:', netflixFolders);
-
         const folders = netflixFolders.folders.map(folder => ({
             name: folder.name,
             path: `Netflix Avatars/${folder.name}`
@@ -26,7 +19,6 @@ export async function getAvatarFolders(req, res) {
 
         res.json({ folders });
     } catch (error) {
-        console.error('Error getting avatar folders:', error);
         res.status(500).json({ error: 'Failed to get avatar folders' });
     }
 }
@@ -37,14 +29,14 @@ export async function getAvatarFolders(req, res) {
  *   get:
  *     tags: 
  *       - User
- *     summary: Get list of avatars by path
+ *     summary: Get list of avatars by show folder
  *     parameters:
  *       - in: query
  *         name: path
  *         required: true
  *         schema:
  *           type: string
- *         description: Path to the avatar folder
+ *         description: Path to the show folder (e.g., "Netflix Avatars/Stranger Things")
  *     responses:
  *       '200':
  *         description: Successfully retrieved avatars
@@ -72,26 +64,44 @@ export async function getAvatarFolders(req, res) {
 export async function getAvatarsByPath(req, res) {
     try {
         const { path } = req.query;
-        console.log('Fetching avatars for path:', path);
         
         if (!path) {
             return res.status(400).json({ error: 'Path parameter is required' });
         }
 
-        // Get resources and filter for PNG images only
-        const searchResult = await cloudinary.v2.api.resources({
-            type: 'upload',
-            prefix: path,
+        // List all assets in the folder
+        const assetsList = await cloudinary.v2.api.resources_by_asset_folder(path, {
+            resource_type: "image",
+            type: "upload",
+            max_results: 100,
         });
 
-        console.log('Raw search result:', JSON.stringify(searchResult, null, 2));
-        console.log(`Total resources found: ${searchResult.resources.length}`);
+        // If no assets found, try regular resources API
+        if (!assetsList.resources || assetsList.resources.length === 0) {
+            const searchResult = await cloudinary.v2.api.resources({
+                type: 'upload',
+                prefix: path,
+                max_results: 100,
+                resource_type: 'image'
+            });
+            
+            if (searchResult.resources && searchResult.resources.length > 0) {
+                assetsList.resources = searchResult.resources;
+            }
+        }
 
-        res.json({ images: searchResult.resources });
+        // Transform the resources to include proper URLs
+        const images = (assetsList.resources || []).map(resource => ({
+            url: resource.secure_url,
+            id: resource.public_id,
+            name: resource.public_id.split('/').pop().split('.')[0],
+            format: resource.format,
+            folder: resource.folder
+        }));
+
+        res.json({ images });
     } catch (error) {
-        console.error('Error fetching avatars:', error);
-        console.error('Error details:', error.message);
-        res.status(500).json({ error: 'Failed to fetch avatars', details: error.message });
+        res.status(500).json({ error: 'Failed to fetch avatars' });
     }
 }
 
@@ -126,19 +136,14 @@ export async function updateUserAvatar(req, res) {
         const { avatarUrl } = req.body;
         const userId = req.user._id;
 
-        console.log('Updating user avatar for user:', userId);
-
         const updatedUser = await User.findByIdAndUpdate(
             userId,
-            { avatarUrl },
+            { image: avatarUrl },  
             { new: true }
         ).select('-password');
 
-        console.log('Updated user:', updatedUser);
-
         res.json(updatedUser);
     } catch (error) {
-        console.error('Error updating avatar:', error);
-        res.status(500).json({ error: 'Failed to update avatar', details: error.message });
+        res.status(500).json({ error: 'Failed to update avatar' });
     }
 }

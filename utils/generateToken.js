@@ -10,12 +10,20 @@ export const generateRefreshToken = (userId) => {
 };
 
 export const setRefreshTokenCookie = (refreshToken, res) => {
-	res.cookie("refreshToken", refreshToken, {
-		domain: "edwardxd.site",  // Parent domain to allow sharing between subdomains
+	// Get the origin from request headers to determine the domain
+	const origin = res.req.headers.origin;
+	const cookieOptions = {
 		maxAge: 15 * 24 * 60 * 60 * 1000,
 		httpOnly: true,
 		sameSite: "none",
 		secure: true,
 		path: "/"
-	});
+	};
+
+	// Set domain only for custom domain, not for Vercel
+	if (origin && origin.includes("edwardxd.site")) {
+		cookieOptions.domain = "edwardxd.site";
+	}
+
+	res.cookie("refreshToken", refreshToken, cookieOptions);
 };

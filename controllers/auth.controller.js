@@ -148,11 +148,26 @@ export async function login(req, res) {
 		}
 
 		const accessToken = generateAccessToken(user._id);
-		const refreshToken = generateRefreshToken(user._id);
+		let refreshToken = user.refreshToken;
 
-		user.refreshToken = refreshToken;
-
-		await user.save();
+		// Check if user has a valid refresh token
+		if (refreshToken) {
+			try {
+				// Verify the existing refresh token
+				jwt.verify(refreshToken, ENV_VARS.JWT_SECRET);
+				// If verification succeeds, token is still valid, keep using it
+			} catch (error) {
+				// If verification fails, token is expired, generate new one
+				refreshToken = generateRefreshToken(user._id);
+				user.refreshToken = refreshToken;
+				await user.save();
+			}
+		} else {
+			// If no refresh token exists, generate new one
+			refreshToken = generateRefreshToken(user._id);
+			user.refreshToken = refreshToken;
+			await user.save();
+		}
 
 		setRefreshTokenCookie(refreshToken, res);
 
