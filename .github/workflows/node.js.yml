@@ -17,6 +17,9 @@ jobs:
       MONGO_URI: ${{ secrets.MONGO_URI }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+      CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+      CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+      CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
       NODE_ENV: production
       PORT: 5000
 
@@ -39,6 +42,9 @@ jobs:
         echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env
         echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
         echo "TMDB_API_KEY=${{ secrets.TMDB_API_KEY }}" >> .env
+        echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> .env
+        echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> .env
+        echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> .env
         echo "NODE_ENV=production" >> .env
         echo "PORT=5000" >> .env
     - name: Restart PM2 process
